@@ -183,10 +183,6 @@ Open an issue or submit a pull request.
 
 ---
 
-## 📄 License
-
-This project is open-source. Add a `LICENSE` file (e.g., MIT) to clarify usage rights for others.
-
 ---
 
 ## 👤 Author
