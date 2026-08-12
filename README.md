@@ -180,7 +180,7 @@ Contributions are welcome! Feel free to:
 - Package the pipeline into a reusable `.py` script/CLI
 
 Open an issue or submit a pull request.
-
+---
 ## 👤 Author
 
 **Harsh** — [@realHarshCodes](https://github.com/realHarshCodes)
