@@ -199,11 +199,11 @@ This project connects **vector calculus** with **classical computer vision** in 
 
 ## 🚀 Future Improvements
 
-* [ ] Add gradient direction visualization
-* [ ] Implement Prewitt, Scharr, and Roberts operators
-* [ ] Compare Sobel with Canny
-* [ ] Add automatic threshold selection
-* [ ] Add noise-reduction experiments
+1. Add gradient direction visualization
+2. Implement Prewitt, Scharr, and Roberts operators
+3. Compare Sobel with Canny
+4. Add automatic threshold selection
+5. Add noise-reduction experiments
 
 ---
 
