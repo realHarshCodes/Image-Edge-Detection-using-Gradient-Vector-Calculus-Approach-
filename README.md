@@ -1,109 +1,155 @@
-# 🌀 Image Edge Detection using Gradient (Vector Calculus Approach)
+# 🌀 Image Edge Detection Using Gradient — Vector Calculus Approach
 
-A compact Python project that detects edges in images by treating pixel intensity as a scalar field and computing its **gradient vector** — the same core idea from multivariable/vector calculus, applied to computer vision.
+A compact Python computer vision project that detects image edges by treating pixel intensity as a **scalar field** and computing its **gradient vector**.
 
-Edges correspond to points of steep intensity change, i.e. points where the **gradient magnitude |∇I|** is large. This project computes that gradient using **Sobel operators**, derives the magnitude, and thresholds it to produce a clean binary edge map.
+The core idea comes directly from **multivariable/vector calculus**:
+
+> Edges occur where image intensity changes rapidly, meaning the **gradient magnitude** is large.
+
+This project uses **Sobel operators** to approximate the partial derivatives of image intensity, calculates the gradient magnitude, and applies a threshold to produce a binary edge map.
 
 ---
 
-## 📐 The Math Behind It
+## 📐 Mathematical Foundation
 
-An image can be modeled as a scalar intensity function:
+An image can be represented as a scalar intensity function:
 
-```
+```text
 I(x, y)
 ```
 
 Its gradient is a 2D vector field:
 
-```
-∇I(x, y) = ( ∂I/∂x , ∂I/∂y ) = ( Gx , Gy )
+```text
+∇I(x, y) = ( ∂I/∂x , ∂I/∂y ) = (Gx, Gy)
 ```
 
-- **Gx** — rate of change of intensity in the horizontal direction
-- **Gy** — rate of change of intensity in the vertical direction
+Where:
 
-The **gradient magnitude** tells us *how strong* an edge is at each pixel:
+* **Gx** — rate of intensity change in the horizontal direction
+* **Gy** — rate of intensity change in the vertical direction
 
-```
+The **gradient magnitude** represents the strength of the intensity change:
+
+```text
 |∇I(x, y)| = √(Gx² + Gy²)
 ```
 
-The **gradient direction** (not visualized in this project, but implicit in Gx/Gy) tells us the orientation of the edge:
+A large gradient magnitude generally indicates a potential image edge.
 
-```
+The gradient direction can also be calculated using:
+
+```text
 θ(x, y) = atan2(Gy, Gx)
 ```
 
-In practice, the continuous partial derivatives ∂I/∂x and ∂I/∂y are approximated on a discrete pixel grid using the **Sobel operator** — a pair of 3×3 convolution kernels that estimate horizontal and vertical derivatives while smoothing out noise.
+Although gradient direction is not visualized in the current implementation, it is implicitly available from `Gx` and `Gy`.
 
-Once the magnitude is computed, a simple **threshold** separates strong intensity transitions (edges) from flat, low-gradient regions (background), producing a binary edge map.
+### From Calculus to Computer Vision
+
+Because digital images consist of discrete pixels, the continuous partial derivatives are approximated numerically.
+
+This project uses the **Sobel operator**, which applies two 3×3 convolution kernels to estimate the horizontal and vertical derivatives while providing some smoothing against noise.
 
 ---
 
-## ⚙️ Pipeline
+## ⚙️ Processing Pipeline
 
-```
-Input Image (BGR)
-      │
-      ▼
+```text
+Input Image
+     │
+     ▼
 Grayscale Conversion
-      │
-      ▼
-Sobel Gx  &  Sobel Gy   (∂I/∂x, ∂I/∂y)
-      │
-      ▼
-Gradient Magnitude  |∇I| = √(Gx² + Gy²)
-      │
-      ▼
+     │
+     ▼
+Sobel Gx & Gy
+(∂I/∂x, ∂I/∂y)
+     │
+     ▼
+Gradient Magnitude
+|∇I| = √(Gx² + Gy²)
+     │
+     ▼
 Normalize to 0–255
-      │
-      ▼
-Threshold  →  Binary Edge Map
-      │
-      ▼
-Side-by-side Visualization
+     │
+     ▼
+Threshold
+     │
+     ▼
+Binary Edge Map
+     │
+     ▼
+Visualization
 ```
+
+---
+
+## ✨ Features
+
+* 🖼️ Converts an input image to grayscale
+* 📐 Computes horizontal and vertical image gradients
+* 🧮 Calculates gradient magnitude using vector calculus
+* 🔍 Detects strong intensity transitions
+* ⚫ Produces a binary edge map
+* 📊 Visualizes the original image, gradient magnitude, and detected edges
+* 🧠 Fully interpretable classical computer vision approach
+* 🐍 Implemented entirely in Python
 
 ---
 
 ## 🗂️ Repository Structure
 
-```
+```text
 Image-Edge-Detection-using-Gradient-Vector-Calculus-Approach-/
-├── vector_calculus.ipynb   # Main notebook — full implementation
-├── image/                  # Sample input/output images
-└── README.md
+│
+├── vector_calculus.ipynb    # Main implementation notebook
+├── image/                   # Sample input/output images
+└── README.md                # Project documentation
 ```
 
 ---
 
 ## 🚀 Getting Started
 
-### 1. Clone the repository
+### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/realHarshCodes/Image-Edge-Detection-using-Gradient-Vector-Calculus-Approach-.git
+
 cd Image-Edge-Detection-using-Gradient-Vector-Calculus-Approach-
 ```
 
-### 2. Install dependencies
+### 2. Install Dependencies
 
 ```bash
 pip install opencv-python numpy matplotlib
 ```
 
-### 3. Add an input image
+If Jupyter Notebook is not already installed:
 
-Place an image named `input.jpg` in the project root (or update the filename in the notebook to point to your own image).
+```bash
+pip install notebook
+```
 
-### 4. Run the notebook
+### 3. Add an Input Image
+
+Place an image named:
+
+```text
+input.jpg
+```
+
+in the project root directory.
+
+You can also modify the image path directly inside the notebook.
+
+### 4. Run the Notebook
 
 ```bash
 jupyter notebook vector_calculus.ipynb
 ```
 
-Run all cells to see the original image, the gradient magnitude map, and the final thresholded edge map plotted side by side.
+Run all cells to generate the edge detection results.
 
 ---
 
@@ -114,73 +160,217 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Load and convert to grayscale
-image = cv2.imread('input.jpg')
+# Load image
+image = cv2.imread("input.jpg")
+
+# Convert BGR image to grayscale
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-# Compute gradients (∂I/∂x, ∂I/∂y) using the Sobel operator
-grad_x = cv2.Sobel(gray, cv2.CV_64F, 1, 0, ksize=3)
-grad_y = cv2.Sobel(gray, cv2.CV_64F, 0, 1, ksize=3)
+# Compute image gradients using Sobel operators
+grad_x = cv2.Sobel(
+    gray,
+    cv2.CV_64F,
+    1,
+    0,
+    ksize=3
+)
 
-# Gradient magnitude: |∇I| = sqrt(Gx² + Gy²)
+grad_y = cv2.Sobel(
+    gray,
+    cv2.CV_64F,
+    0,
+    1,
+    ksize=3
+)
+
+# Gradient magnitude
 magnitude = np.sqrt(grad_x**2 + grad_y**2)
 
-# Normalize to 0–255
+# Normalize gradient magnitude to 0–255
 magnitude = (magnitude / magnitude.max()) * 255
 magnitude = magnitude.astype(np.uint8)
 
-# Threshold to obtain binary edges
-_, edges = cv2.threshold(magnitude, 50, 255, cv2.THRESH_BINARY)
+# Threshold to obtain binary edge map
+_, edges = cv2.threshold(
+    magnitude,
+    50,
+    255,
+    cv2.THRESH_BINARY
+)
 ```
 
 ---
 
-## 🎛️ Tuning
+## 📊 Visualization
 
-| Parameter | Location | Effect |
-|---|---|---|
-| `ksize` in `cv2.Sobel` | Gradient step | Larger kernel → smoother gradients, less sensitive to noise, coarser edges |
-| Threshold value (`50`) | `cv2.threshold` | Lower → more (and fainter) edges detected; Higher → only strong edges survive |
+The notebook generates a side-by-side visualization containing:
 
-Try adjusting the threshold value to see how edge sensitivity changes — this is the simplest and most impactful parameter to experiment with.
+### 1. Original Image
+
+The original input image displayed in RGB format.
+
+### 2. Gradient Magnitude
+
+A grayscale representation of:
+
+```text
+|∇I(x, y)|
+```
+
+Brighter pixels represent stronger intensity changes.
+
+### 3. Edge Detection
+
+The thresholded gradient magnitude produces a binary image where:
+
+* **White** → detected edge
+* **Black** → non-edge region
 
 ---
 
-## 📊 Output
+## 🎛️ Parameters You Can Experiment With
 
-The notebook produces a single figure with three panels:
+| Parameter      | Location          | Effect                           |
+| -------------- | ----------------- | -------------------------------- |
+| `ksize`        | `cv2.Sobel()`     | Controls the Sobel kernel size   |
+| Threshold `50` | `cv2.threshold()` | Controls edge sensitivity        |
+| Input image    | `cv2.imread()`    | Changes the image being analyzed |
 
-1. **Original** — the input image in RGB
-2. **Gradient Magnitude |∇I(x, y)|** — grayscale visualization of edge strength at every pixel
-3. **Edge Detection (Thresholded Gradient)** — final binary edge map
+### Sobel Kernel Size
+
+```python
+ksize=3
+```
+
+A larger kernel generally produces a smoother gradient response and can reduce sensitivity to small-scale noise, but may also produce coarser edge localization.
+
+### Threshold
+
+```python
+cv2.threshold(magnitude, 50, 255, cv2.THRESH_BINARY)
+```
+
+* **Lower threshold** → detects more and weaker edges
+* **Higher threshold** → keeps mainly stronger edges
+
+Experimenting with the threshold is the easiest way to observe how edge sensitivity changes.
+
+---
+
+## 🔬 Understanding the Gradient
+
+For every pixel, the Sobel operators estimate:
+
+```text
+Gx = ∂I/∂x
+Gy = ∂I/∂y
+```
+
+These two values form a gradient vector:
+
+```text
+∇I = (Gx, Gy)
+```
+
+The magnitude of this vector determines how rapidly the image intensity changes:
+
+```text
+|∇I| = √(Gx² + Gy²)
+```
+
+Therefore:
+
+```text
+Small |∇I|  → relatively uniform region
+Large |∇I|  → strong intensity transition → possible edge
+```
+
+This provides a direct connection between **vector calculus** and **classical computer vision**.
+
+---
+
+## 💡 Why Use This Approach?
+
+Unlike many deep-learning-based edge detection systems, this method is **mathematically interpretable**.
+
+Every major step corresponds directly to a mathematical concept:
+
+| Computer Vision    | Mathematical Concept     |
+| ------------------ | ------------------------ |
+| Pixel intensity    | Scalar field             |
+| Sobel Gx           | Approximation of `∂I/∂x` |
+| Sobel Gy           | Approximation of `∂I/∂y` |
+| Gradient           | Vector field             |
+| Gradient magnitude | Vector magnitude         |
+| Gradient direction | `atan2(Gy, Gx)`          |
+| Thresholding       | Edge classification      |
+
+This makes the project useful for understanding how concepts from **multivariable calculus, numerical differentiation, and linear algebra** are applied to image processing.
+
+---
+
+## 🆚 Classical Edge Detection
+
+This project uses the gradient-based approach as a foundation for understanding more advanced edge detectors.
+
+Possible extensions include:
+
+* **Sobel**
+* **Prewitt**
+* **Scharr**
+* **Roberts Cross**
+* **Canny**
+
+The project can therefore be extended into a comparison of different classical edge detection techniques.
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **Python 3**
-- **OpenCV** (`cv2`) — image I/O, Sobel convolution, thresholding
-- **NumPy** — vector/matrix operations for gradient magnitude
-- **Matplotlib** — visualization
+* **Python 3**
+* **OpenCV** — image processing, Sobel operators, thresholding
+* **NumPy** — numerical and vector operations
+* **Matplotlib** — visualization
+* **Jupyter Notebook** — interactive implementation
 
 ---
 
-## 💡 Why This Approach?
+## 🚀 Possible Future Improvements
 
-Unlike black-box deep learning edge detectors, this method is fully interpretable: every step maps directly to a vector calculus concept (partial derivatives, gradient vectors, vector magnitude). It's a great way to *see* multivariable calculus in action and understand the mathematical foundation that classical computer vision operators (Sobel, Prewitt, Canny) are built on.
+* [ ] Add gradient direction visualization
+* [ ] Implement Prewitt operator
+* [ ] Implement Scharr operator
+* [ ] Implement Roberts Cross operator
+* [ ] Add Canny edge detection for comparison
+* [ ] Compare different threshold values automatically
+* [ ] Add noise and filtering experiments
+* [ ] Create a reusable Python CLI application
+* [ ] Compare edge detection results using different images
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are welcome! Feel free to:
-- Add support for other gradient operators (Prewitt, Scharr, Roberts Cross)
-- Implement Canny edge detection for comparison
-- Add gradient direction visualization
-- Package the pipeline into a reusable `.py` script/CLI
+Contributions and improvements are welcome.
 
-Open an issue or submit a pull request.
+You can contribute by:
+
+* Adding new gradient operators
+* Improving visualization
+* Adding additional image-processing techniques
+* Comparing different edge detection algorithms
+* Improving documentation
+
+Feel free to open an issue or submit a pull request.
+
 ---
+
 ## 👤 Author
 
 **Harsh** — [@realHarshCodes](https://github.com/realHarshCodes)
+
+---
+
+## 🔗 Repository
+
+[Image Edge Detection using Gradient — Vector Calculus Approach](https://github.com/realHarshCodes/Image-Edge-Detection-using-Gradient-Vector-Calculus-Approach-)
