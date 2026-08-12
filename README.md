@@ -181,10 +181,6 @@ Contributions are welcome! Feel free to:
 
 Open an issue or submit a pull request.
 
----
-
----
-
 ## 👤 Author
 
 **Harsh** — [@realHarshCodes](https://github.com/realHarshCodes)
